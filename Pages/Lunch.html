@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinner - Stella Nova Motel</title>
+    <link rel="stylesheet" href="Cart.css".css">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at top, hsl(258, 100%, 15%) 0%, hsl(240, 100%, 8%) 25%, hsl(230, 95%, 4%) 50%, hsl(220, 100%, 2%) 100%);
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, hsla(280, 100%, 20%, 0.1) 0%, hsla(260, 100%, 15%, 0.05) 100%);
+            pointer-events: none;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            color: #333;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+
+        .modal h2 {
+            margin-top: 0;
+            color: #d35400;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .submit-btn {
+            background-color: #d35400;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: #e67e22;
+        }
+
+        .cart-container {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            z-index: 999;
+            display: none;
+            color: #333;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .cart-items {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .cart-total {
+            font-weight: bold;
+            text-align: right;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .checkout-btn {
+            background-color: #d35400;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .checkout-btn:hover {
+            background-color: #e67e22;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 10px;
+            color: #888;
+        }
+
+        .cart-toggle {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: white;
+            color: #333;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 998;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #d35400;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .order-confirmation {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 6px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+        }
+        
+        .order-summary {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+        }
+        
+        .order-summary h3 {
+            margin-top: 0;
+            color: #d35400;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .summary-total {
+            font-weight: bold;
+            border-top: 1px solid #ddd;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+
+        /* Top Header */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo h2 {
+            font-size: 26px;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .info span {
+            margin: 0 10px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .order-btn {
+            background: white;
+            color: black;
+            padding: 12px 22px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .order-btn:hover {
+            background-color: #ff6b6b;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Nav Menu */
+        .menu {
+            display: flex;
+            gap: 5px;
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu button {
+            border: none;
+            background: none;
+            font-size: 15px;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .menu button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .menu .active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* dinner Intro */
+        .dinner-intro {
+            text-align: center;
+            padding: 60px 20px 30px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .dinner-intro h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .dinner-intro p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+        
+        .dinner-hours {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 0 auto 40px;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+        
+        .dinner-hours h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: white;
+        }
+        
+        /* dinner Deal */
+        .dinner-deal {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px auto;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dinner-deal::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 极 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        
+        .dinner-deal h2 {
+            margin-bottom: 15px;
+            font-size: 28px;
+            position: relative;
+        }
+        
+        .dinner-deal p {
+            margin-bottom: 10px;
+            font-size: 18px;
+            position: relative;
+        }
+        
+        /* Category Title */
+        .category-title {
+            text-align: center;
+            margin: 50px 0 30px;
+            font-size: 32px;
+            padding-bottom: 15px;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            color: white;
+        }
+        
+        .category-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            border-radius: 3px;
+        }
+        
+        /* Specials Section */
+        .dinner-special {
+            text-align: center;
+            padding: 20px 40px 40px;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 320px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            text-align: left;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .card-img {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .card:hover .card-img img {
+            transform: scale(1.1);
+        }
+
+        .card-img .tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            color: white;
+            font-size: 12px;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content h3 {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .price {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .card-content p {
+            font-size: 14px;
+            margin: 10px 0;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        .card-content .labels {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .card-content .labels span {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 11px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        button a:hover {
+            color: white;
+        }
+        
+        .menu button a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Floating particles background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .cards {
+                gap: 20px;
+            }
+            
+            .card {
+                width: 300px;
+            }
+        }
+        
+        /* Medium devices (tablets, 768px to 991px) */
+        @media (max-width: 992px) {
+            .top-bar {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            
+            .info {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .menu {
+                overflow-x: auto;
+                padding: 10px 15px;
+                justify-content: flex-start;
+            }
+            
+            .menu button {
+                white-space: nowrap;
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+            
+            .dinner-intro h1 {
+                font-size: 36px;
+            }
+            
+            .dinner-intro p {
+                font-size: 16px;
+                padding: 0 15px;
+            }
+            
+            .dinner-hours {
+                width: 90%;
+                padding: 15px;
+            }
+            
+            .dinner-deal {
+                width: 95%;
+                padding: 25px;
+            }
+            
+            .cards {
+                gap: 15px;
+            }
+            
+            .card {
+                width: calc(50% - 20px);
+                min-width: 280px;
+            }
+            
+            .cart-container {
+                width: 280px;
+            }
+        }
+        
+        /* Small devices (landscape phones, 576px to 767px) */
+        @media (max-width: 768px) {
+            .top-bar {
+                padding: 12px 15px;
+            }
+            
+            .logo h2 {
+                font-size: 22px;
+            }
+            
+            .logo p {
+                font-size: 12px;
+            }
+            
+            .info span {
+                font-size: 12px;
+                margin: 0 5px;
+            }
+            
+            .order-btn {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+            
+            .dinner-intro {
+                padding: 40px 15px 20px;
+            }
+            
+            .dinner-intro h1 {
+                font-size: 32px;
+            }
+            
+            .category-title {
+                font-size: 28px;
+                margin: 40px 0 25px;
+            }
+            
+            .dinner-deal h2 {
+                font-size: 24px;
+            }
+            
+            .dinner-deal p {
+                font-size: 16px;
+            }
+            
+            .cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .cart-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+                top: 70px;
+            }
+            
+            .cart-container {
+                width: 90%;
+                right: 5%;
+                left: 5%;
+                top: 130px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+        
+        /* Extra small devices (portrait phones, less than 576px) */
+        @media (max-width: 576px) {
+            .top-bar {
+                padding: 10px;
+            }
+            
+            .info {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .info span {
+                display: block;
+                margin: 5px 0;
+            }
+            
+            .menu {
+                padding: 8px 10px;
+            }
+            
+            .menu button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .dinner-intro h1 {
+                font-size: 28px;
+            }
+            
+            .dinner-intro p {
+                font-size: 14px;
+            }
+            
+            .dinner-hours h3 {
+                font-size: 16px;
+            }
+            
+            .category-title {
+                font-size: 24px;
+                width: 90%;
+            }
+            
+            .dinner-deal {
+                padding: 20px 15px;
+            }
+            
+            .dinner-deal h2 {
+                font-size: 20px;
+            }
+            
+            .dinner-deal p {
+                font-size: 14px;
+            }
+            
+            .card {
+                width: 100%;
+            }
+            
+            .card-content h3 {
+                font-size: 16px;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .price {
+                font-size: 16px;
+            }
+            
+            .card-content p {
+                font-size: 13px;
+            }
+            
+            .card-content .labels span {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+            
+            .cart-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                top: 65px;
+                right: 10px;
+            }
+            
+            .cart-count {
+                width: 18px;
+                height: 18px;
+                font-size: 10px;
+            }
+            
+            .cart-container {
+                width: 94%;
+                right: 3%;
+                left: 3%;
+                padding: 12px;
+            }
+            
+            .modal-content {
+                padding: 15px;
+            }
+            
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 8px;
+                font-size: 13px;
+            }
+            
+            .submit-btn, .checkout-btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            footer {
+                padding: 20px 15px;
+                font-size: 12px;
+            }
+        }
+        
+        /* Very small devices (less than 400px) */
+        @media (max-width: 400px) {
+            .logo h2 {
+                font-size: 20px;
+            }
+            
+            .dinner-intro h1 {
+                font-size: 24px;
+            }
+            
+            .category-title {
+                font-size: 22px;
+            }
+            
+            .card-img {
+                height: 180px;
+            }
+            
+            .card-content {
+                padding: 15px;
+            }
+        }
+        
+        /* Orientation adjustments */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .top-bar {
+                padding: 8px 15px;
+            }
+            
+            .dinner-intro {
+                padding: 30px 15px 15px;
+            }
+            
+            .category-title {
+                margin: 30px 0 20px;
+            }
+            
+            .cards {
+                gap: 10px;
+            }
+            
+            .card {
+                width: calc(50% - 10px);
+            }
+            
+            .cart-container {
+                max-height: 70vh;
+            }
+        }
+        
+        /* High-resolution displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .card-img img {
+                transform: scale(1); /* Prevent excessive scaling on high-res displays */
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .modal-content, .modal-content * {
+                visibility: visible;
+            }
+            
+            .modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                display: block;
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <!-- Header -->
+    <header class="top-bar">
+        <div class="logo">
+            <h2>Stella Nova Motel</h2>
+            <p>Restaurant & Bar</p>
+        </div>
+        <button class="order-btn">Order Now</button>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="menu">
+        <button><a href="Current.html">Current Specials</a></button>
+        <button><a href="Breakfast.html">Breakfast</a></button>
+        <button class="active"><a href="dinner.html">Lunch</a></button>
+        <button><a href="Dinner.html">Dinner</a></button>
+        <button><a href="Beverages.html">Beverages</a></button>
+    </nav>
+
+    <!-- Dinner Intro -->
+    <div class="dinner-intro">
+        <h1>Evening Excellence at Stella Nova Motel</h1>
+        <p>Experience our exquisite dinner menu featuring gourmet dishes and local specialties</p>
+    </div>
+    
+    <div class="dinner-hours">
+        <h3>Dinner Hours: 5:30 PM - 10:00 PM Daily</h3>
+    </div>
+    
+    <!-- Dinner Special -->
+    <div class="dinner-deal">
+        <h2>🌙 Stella Nova Special 🌙</h2>
+        <p>Three-course prix fixe menu for only <strong>45,000 RWF</strong></p>
+        <p><em>Available every evening from 5:30 PM - 9:00 PM</em></p>
+    </div>
+
+    <!-- Appetizers -->
+    <h2 class="category-title">Appetizers</h2>
+    <section class="specials">
+        <div class="cards">
+            <!-- Card 1 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1619894991209-32b8fb1d5ce3?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Calamari">
+                    <span class="tag">Popular</span>
+                </div>
+                <div class="card-content">
+                    <h3>Crispy Calamari <span class="price">18,000 RWF</span></h3>
+                    <p>Lightly battered and fried calamari served with lemon aioli and marinara sauce.</p>
+                    <div class="labels">
+                        <span>Seafood</span>
+                        <span>Shareable</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1516100882582-96c3a05fe590?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Stuffed Mushrooms">
+                </div>
+                <div class="card-content">
+                    <h3>Stuffed Mushrooms <span class="price">15,000 RWF</span></h3>
+                    <p>Mushroom caps filled with herbed cream cheese and breadcrumbs, baked to perfection.</p>
+                    <div class="labels">
+                        <span>Vegetarian</span>
+                        <span>Baked</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1603360946369-dc9bbd814503?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Beef Brochettes">
+                </div>
+                <div class="card-content">
+                    <h3>Beef Brochettes <span class="price">20,000 RWF</span></h3>
+                    <p>Traditional Rwandan beef skewers marinated in spices and grilled to perfection.</p>
+                    <div class="labels">
+                        <span>Local Specialty</span>
+                        <span>Spicy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Courses -->
+    <h2 class="category-title">Main Courses</h2>
+    <section class="specials">
+        <div class="cards">
+            <!-- Card 1 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Filet Mignon">
+                    <span class="tag">Chef's Special</span>
+                </div>
+                <div class="card-content">
+                    <h3>Filet Mignon <span class="price">38,000 RWF</span></h3>
+                    <p>8oz premium beef tenderloin with red wine reduction, roasted potatoes, and seasonal vegetables.</p>
+                    <div class="labels">
+                        <span>Premium Cut</span>
+                        <span>Gluten-Free</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1598214886806-c87b84b7078b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Grilled Tilapia">
+                </div>
+                <div class="card-content">
+                    <h3>Grilled Tilapia <span class="price">25,000 RWF</span></h3>
+                    <p>Fresh tilapia from Lake Kivu, grilled with local spices and served with plantains and vegetables.</p>
+                    <div class="labels">
+                        <span>Local</span>
+                        <span>Gluten-Free</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1555939595-93efb2f5c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Herb-Crusted Chicken">
+                </div>
+                <div class="card-content">
+                    <h3>Herb-Crusted Chicken <span class="price">28,000 RWF</span></h3>
+                    <p>Chicken breast coated in herbed breadcrumbs, served with mashed potatoes and green beans.</p>
+                    <div class="labels">
+                        <span>Comfort Food</span>
+                        <span>Crispy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pasta -->
+    <h2 class="category-title">Pasta Specialties</h2>
+    <section class="specials">
+        <div class="cards">
+            <!-- Card 1 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Spaghetti Bolognese">
+                </div>
+                <div class="card-content">
+                    <h3>Spaghetti Bolognese <span class="price">22,000 RWF</span></h3>
+                    <p>Classic spaghetti with rich meat sauce, parmesan, and garlic bread.</p>
+                    <div class="labels">
+                        <span>Hearty</span>
+                        <span>Family Favorite</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1613564834361-9436947217b1?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Chicken Alfredo">
+                </div>
+                <div class="card-content">
+                    <h3>Chicken Alfredo <span class="price">26,000 RWF</span></h3>
+                    <p>Fettuccine pasta with grilled chicken and creamy Alfredo sauce.</p>
+                    <div class="labels">
+                        <span>Rich</span>
+                        <span>Creamy</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1608755728592-2d6a3ee5b0a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Seafood Linguine">
+                </div>
+                <div class="card-content">
+                    <h3>Seafood Linguine <span class="price">32,000 RWF</span></h3>
+                    <p>Linguine pasta with shrimp, scallops, and mussels in a white wine garlic sauce.</p>
+                    <div class="labels">
+                        <span>Seafood</span>
+                        <span>Gourmet</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vegetarian -->
+    <h2 class="category-title">Vegetarian Options</h2>
+    <section class="specials">
+        <div class="cards">
+            <!-- Card 1 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1516100882582-96c3a05fe590?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Mushroom Risotto">
+                    <span class="tag">Chef's Recommendation</span>
+                </div>
+                <div class="card-content">
+                    <h3>Mushroom Risotto <span class="price">24,000 RWF</span></h3>
+                    <p>Creamy arborio rice with wild mushrooms, parmesan, and fresh herbs.</p>
+                    <div class="labels">
+                        <span>Vegetarian</span>
+                        <span>Creamy</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Vegetable Curry">
+                </div>
+                <div class="card-content">
+                    <h3>Vegetable Curry <span class="price">20,000 RWF</span></h3>
+                    <p>Seasonal vegetables in a fragrant coconut curry sauce, served with rice.</p>
+                    <div class="labels">
+                        <span>Vegetarian</span>
+                        <span>Vegan Option</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1598866592122-6e8a58c4b311?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Stuffed Bell Peppers">
+                </div>
+                <div class="card-content">
+                    <h3>Stuffed Bell Peppers <span class="price">22,000 RWF</span></h3>
+                    <p>Bell peppers filled with quinoa, black beans, corn, and cheese, baked to perfection.</p>
+                    <div class="labels">
+                        <span>Vegan Option</span>
+                        <span>Gluten-Free</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Desserts -->
+    <h2 class="category-title">Desserts</h2>
+    <section class="specials">
+        <div class="cards">
+            <!-- Card 1 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Chocolate Lava Cake">
+                    <span class="tag">Signature</span>
+                </div>
+                <div class="card-content">
+                    <h3>Chocolate Lava Cake <span class="price">12,000 RWF</span></h3>
+                    <p>Warm chocolate cake with a molten center, served with vanilla ice cream.</p>
+                    <div class="labels">
+                        <span>Chocolate</span>
+                        <span>Warm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Crème Brûlée">
+                </div>
+                <div class="card-content">
+                    <h3>Crème Brûlée <span class="price">10,000 RWF</span></h3>
+                    <p>Classic vanilla custard with a caramelized sugar top.</p>
+                    <div class="labels">
+                        <span>Creamy</span>
+                        <span>Classic</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Fresh Fruit Platter">
+                </div>
+                <div class="card-content">
+                    <h3>Fresh Fruit Platter <span class="price">9,000 RWF</span></h3>
+                    <p>Seasonal fresh fruits with a honey yogurt dip.</p>
+                    <div class="labels">
+                        <span>Healthy</span>
+                        <span>Refreshing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 Stella Nova Motel Restaurant & Bar. Open daily 6AM - 11PM</p>
+        <p>Kigali, Rwanda • (250) 788-8888 • info@StellaNovamotel.com</p>
+    </footer>
+
+    <script>
+        // Create floating particles for background
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 5 and 15px
+                const size = Math.random() * 10 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                
+                // Random animation duration between 10 and 20s
+                const duration = Math.random() * 10 + 15;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random delay
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breakfast - Stella Nova Motel</title>
+    <link rel="stylesheet" href="Cart.css">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at top, hsl(258, 100%, 15%) 0%, hsl(240, 100%, 8%) 25%, hsl(230, 95%, 4%) 50%, hsl(220, 100%, 2%) 100%);
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, hsla(280, 100%, 20%, 0.1) 0%, hsla(260, 100%, 15%, 0.05) 100%);
+            pointer-events: none;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+
+        /* Top Header */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo h2 {
+            font-size: 26px;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .info span {
+            margin: 0 10px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .order-btn {
+            background: white;
+            color: black;
+            padding: 12px 22px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .order-btn:hover {
+            background-color: #ff6b6b;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Nav Menu */
+        .menu {
+            display: flex;
+            gap: 5px;
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu button {
+            border: none;
+            background: none;
+            font-size: 15px;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .menu button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .menu .active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Lunch Intro */
+        .breakfast-intro {
+            text-align: center;
+            padding: 60px 20px 30px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .breakfast-intro h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .breakfast-intro p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+        
+        .breakfast-hours {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 0 auto 40px;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+        
+        .breakfast-hours h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        /* Lunch Deal */
+        .breakfast-deal {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px auto;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            color: #333;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .breakfast-deal::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 极 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        
+        .breakfast-deal h2 {
+            margin-bottom: 15px;
+            font-size: 28px;
+            position: relative;
+        }
+        
+        .breakfast-deal p {
+            margin-bottom: 10px;
+            font-size: 18px;
+            position: relative;
+        }
+        
+        /* Category Title */
+        .category-title {
+            text-align: center;
+            margin: 50px 0 30px;
+            font-size: 32px;
+            padding-bottom: 15px;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+        
+        .category-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            border-radius: 3px;
+        }
+        
+        /* Specials Section */
+        .specials {
+            text-align: center;
+            padding: 20px 40px 40px;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 320px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            text-align: left;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .card-img {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .card:hover .card-img img {
+            transform: scale(1.1);
+        }
+
+        .card-img .tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            color: white;
+            font-size: 12px;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content h3 {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .price {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .card-content p {
+            font-size: 14px;
+            margin: 10px 0;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        .card-content .labels {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .card-content .labels span {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 11px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        button a:hover {
+            color: white;
+        }
+        
+        .menu button a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Floating particles background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .cards {
+                gap: 20px;
+            }
+            
+            .card {
+                width: 300px;
+            }
+        }
+        
+        /* Medium devices (tablets, 768px to 991px) */
+        @media (max-width: 992px) {
+            .top-bar {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            
+            .info {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .menu {
+                overflow-x: auto;
+                padding: 10px 15px;
+                justify-content: flex-start;
+            }
+            
+            .menu button {
+                white-space: nowrap;
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+            
+            .dinner-intro h1 {
+                font-size: 36px;
+            }
+            
+            .dinner-intro p {
+                font-size: 16px;
+                padding: 0 15px;
+            }
+            
+            .dinner-hours {
+                width: 90%;
+                padding: 15px;
+            }
+            
+            .dinner-deal {
+                width: 95%;
+                padding: 25px;
+            }
+            
+            .cards {
+                gap: 15px;
+            }
+            
+            .card {
+                width: calc(50% - 20px);
+                min-width: 280px;
+            }
+            
+            .cart-container {
+                width: 280px;
+            }
+        }
+        
+        /* Small devices (landscape phones, 576px to 767px) */
+        @media (max-width: 768px) {
+            .top-bar {
+                padding: 12px 15px;
+            }
+            
+            .logo h2 {
+                font-size: 22px;
+            }
+            
+            .logo p {
+                font-size: 12px;
+            }
+            
+            .info span {
+                font-size: 12px;
+                margin: 0 5px;
+            }
+            
+            .order-btn {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+            
+            .dinner-intro {
+                padding: 40px 15px 20px;
+            }
+            
+            .dinner-intro h1 {
+                font-size: 32px;
+            }
+            
+            .category-title {
+                font-size: 28px;
+                margin: 40px 0 25px;
+            }
+            
+            .dinner-deal h2 {
+                font-size: 24px;
+            }
+            
+            .dinner-deal p {
+                font-size: 16px;
+            }
+            
+            .cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .cart-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+                top: 70px;
+            }
+            
+            .cart-container {
+                width: 90%;
+                right: 5%;
+                left: 5%;
+                top: 130px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+        
+        /* Extra small devices (portrait phones, less than 576px) */
+        @media (max-width: 576px) {
+            .top-bar {
+                padding: 10px;
+            }
+            
+            .info {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .info span {
+                display: block;
+                margin: 5px 0;
+            }
+            
+            .menu {
+                padding: 8px 10px;
+            }
+            
+            .menu button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .dinner-intro h1 {
+                font-size: 28px;
+            }
+            
+            .dinner-intro p {
+                font-size: 14px;
+            }
+            
+            .dinner-hours h3 {
+                font-size: 16px;
+            }
+            
+            .category-title {
+                font-size: 24px;
+                width: 90%;
+            }
+            
+            .dinner-deal {
+                padding: 20px 15px;
+            }
+            
+            .dinner-deal h2 {
+                font-size: 20px;
+            }
+            
+            .dinner-deal p {
+                font-size: 14px;
+            }
+            
+            .card {
+                width: 100%;
+            }
+            
+            .card-content h3 {
+                font-size: 16px;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .price {
+                font-size: 16px;
+            }
+            
+            .card-content p {
+                font-size: 13px;
+            }
+            
+            .card-content .labels span {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+            
+            .cart-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                top: 65px;
+                right: 10px;
+            }
+            
+            .cart-count {
+                width: 18px;
+                height: 18px;
+                font-size: 10px;
+            }
+            
+            .cart-container {
+                width: 94%;
+                right: 3%;
+                left: 3%;
+                padding: 12px;
+            }
+            
+            .modal-content {
+                padding: 15px;
+            }
+            
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 8px;
+                font-size: 13px;
+            }
+            
+            .submit-btn, .checkout-btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            footer {
+                padding: 20px 15px;
+                font-size: 12px;
+            }
+        }
+        
+        /* Very small devices (less than 400px) */
+        @media (max-width: 400px) {
+            .logo h2 {
+                font-size: 20px;
+            }
+            
+            .dinner-intro h1 {
+                font-size: 24px;
+            }
+            
+            .category-title {
+                font-size: 22px;
+            }
+            
+            .card-img {
+                height: 180px;
+            }
+            
+            .card-content {
+                padding: 15px;
+            }
+        }
+        
+        /* Orientation adjustments */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .top-bar {
+                padding: 8px 15px;
+            }
+            
+            .dinner-intro {
+                padding: 30px 15px 15px;
+            }
+            
+            .category-title {
+                margin: 30px 0 20px;
+            }
+            
+            .cards {
+                gap: 10px;
+            }
+            
+            .card {
+                width: calc(50% - 10px);
+            }
+            
+            .cart-container {
+                max-height: 70vh;
+            }
+        }
+        
+        /* High-resolution displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .card-img img {
+                transform: scale(1); /* Prevent excessive scaling on high-res displays */
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .modal-content, .modal-content * {
+                visibility: visible;
+            }
+            
+            .modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                display: block;
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="particles" id="particles"></div>
+    <header class="top-bar">
+        <div class="logo">
+            <h2>Stella Nova Motel</h2>
+            <p>Restaurant & Bar</p>
+        </div>
+        <button class="order-btn">Order Now</button>
+    </header>
+
+
+    <div class="cart-container" id="cartContainer">
+        <div class="cart-header">
+            <h3>Your Order</h3>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart">Your cart is empty</div>
+        </div>
+        <div class="cart-total" id="cartTotal">
+            Total: 0 RWF
+        </div>
+        <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+    </div>
+
+    <nav class="menu">
+        <button><a href="Current.html">Current Specials</a></button>
+        <button class="active"><a href="Breakfast.html">Breakfast</a></button>
+        <button><a href="Lunch.html">Lunch</a></button>
+        <button><a href="Dinner.html">Dinner</a></button>
+        <button><a href="Beverages.html">Beverages</a></button>
+    </nav>
+
+    <div class="breakfast-intro">
+        <h1 style="color: white;">Sunrise Breakfast Selection</h1>
+        <p style="color: white;">Start your day with our delicious breakfast options, made fresh daily with locally sourced ingredients</p>
+    </div>
+    
+    <div class="breakfast-hours">
+        <h3 style="color: white;">Breakfast Hours: 6:00 AM - 11:00 AM Daily</h3>
+    </div>
+
+    <div class="breakfast-deal">
+        <h2 style="color: white;">🌟 Breakfast Special 🌟</h2>
+        <p style="color: white;">Enjoy the best Breakfast that make you feel good all the day</p>
+        <p style="color: white;"><em>Available Monday to Friday, 6:00 AM - 11:00 PM</em></p>
+    </div>
+
+    <section class="specials">
+        <h1 style="margin-bottom: 30px; color: white;">Breakfast Specials</h1>
+        <div class="cards">
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1551782450-17144efb9c50?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Sunrise Breakfast Platter">
+                    <span class="tag">Chef's Choice</span>
+                </div>
+                <div class="card-content">
+                    <h3>Sunrise Breakfast Platter <span class="price">18,000 RWF</span></h3>
+                    <p>Two eggs any style, bacon, sausage, roasted tomatoes, mushrooms, baked beans, and toast.</p>
+                    <div class="labels">
+                        <span>Hearty</span>
+                        <span>Protein-rich</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Continental Breakfast">
+                    <span class="tag">Light Option</span>
+                </div>
+                <div class="card-content">
+                    <h3>Continental Breakfast <span class="price">12,000 RWF</span></h3>
+                    <p>Fresh pastries, seasonal fruits, yogurt, and choice of coffee or tea.</p>
+                    <div class="labels">
+                        <span>Light</span>
+                        <span>Vegetarian</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="African Breakfast">
+                    <span class="tag">Local Favorite</span>
+                </div>
+                <div class="card-content">
+                    <h3>African Breakfast <span class="price">15,000 RWF</span></h3>
+                    <p>Mandazi, chapati, beans, sukuma wiki, and avocado with your choice of tea.</p>
+                    <div class="labels">
+                        <span>Local</span>
+                        <span>Vegetarian Option</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <h2 class="category-title" style="color: white;">Egg Dishes</h2>
+    <section class="specials">
+        <div class="cards">
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Western Omelette">
+                </div>
+                <div class="card-content">
+                    <h3>Western Omelette <span class="price">14,000 RWF</span></h3>
+                    <p>Three-egg omelette with ham, bell peppers, onions, and cheese. Served with breakfast potatoes.</p>
+                    <div class="labels">
+                        <span>Gluten-Free</span>
+                        <span>High Protein</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1598214886806-c87b84b7078b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Eggs Benedict">
+                </div>
+                <div class="card-content">
+                    <h3>Eggs Benedict <span class="price">16,000 RWF</span></h3>
+                    <p>Poached eggs on English muffins with Canadian bacon and hollandaise sauce.</p>
+                    <div class="labels">
+                        <span>Classic</span>
+                        <span>Rich</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1571638810996-0175f13c6bb2?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Vegetarian Breakfast Bowl">
+                </div>
+                <div class="card-content">
+                    <h3>Vegetarian Breakfast Bowl <span class="price">13,000 RWF</span></h3>
+                    <p>Scrambled eggs, black beans, avocado, salsa, and cheese on a bed of quinoa.</p>
+                    <div class="labels">
+                        <span>Vegetarian</span>
+                        <span>Gluten-Free</span>
+                        <span>Healthy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <h2 class="category-title" style="color: white;">Pancakes & Waffles</h2>
+    <section class="specials">
+        <div class="cards">
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Classic Pancakes">
+                </div>
+                <div class="card-content">
+                    <h3>Classic Pancakes <span class="price">10,000 RWF</span></h3>
+                    <p>Stack of three fluffy buttermilk pancakes with maple syrup and butter.</p>
+                    <div class="labels">
+                        <span>Vegetarian</span>
+                        <span>Sweet</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Belgian Waffle">
+                </div>
+                <div class="card-content">
+                    <h3>Belgian Waffle <span class="price">12,000 RWF</span></h3>
+                    <p>Crispy Belgian waffle topped with fresh berries and whipped cream.</p>
+                    <div class="labels">
+                        <span>Vegetarian</span>
+                        <span>Berry Delight</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1528207776546-365bb710ee93?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Banana Nut Pancakes">
+                </div>
+                <div class="card-content">
+                    <h3>Banana Nut Pancakes <span class="price">13,000 RWF</span></h3>
+                    <p>Pancakes with mashed bananas and walnuts, topped with caramel sauce.</p>
+                    <div class="labels">
+                        <span>Vegetarian</span>
+                        <span>Nutty</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <h2 class="category-title" style="color: white;">Healthy Options</h2>
+    <section class="specials">
+        <div class="cards">
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Acai Bowl">
+                </div>
+                <div class="card-content">
+                    <h3>Acai Bowl <span class="price">14,000 RWF</span></h3>
+                    <p>Blended acai topped with granola, banana, strawberries, and honey.</p>
+                    <div class="labels">
+                        <span>Vegan</span>
+                        <span>Gluten-Free</span>
+                        <span>Superfood</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Avocado Toast">
+                </div>
+                <div class="card-content">
+                    <h3>Avocado Toast <span class="price">11,000 RWF</span></h3>
+                    <p>Smashed avocado on artisan bread with cherry tomatoes and microgreens.</p>
+                    <div class="labels">
+                        <span>Vegetarian</span>
+                        <span>Healthy Fats</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Yogurt Parfait">
+                </div>
+                <div class="card-content">
+                    <h3>Yogurt Parfait <span class="price">9,000 RWF</span></h3>
+                    <p>Layers of Greek yogurt, granola, and mixed berries with a drizzle of honey.</p>
+                    <div class="labels">
+                        <span>Vegetarian</span>
+                        <span>High Protein</span>
+                        <span>Gluten-Free Option</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <h2 class="category-title" style="color: white;">Breakfast Beverages</h2>
+    <section class="specials">
+        <div class="cards">
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Fresh Brewed Coffee">
+                </div>
+                <div class="card-content">
+                    <h3>Fresh Brewed Coffee <span class="price">4,000 RWF</span></h3>
+                    <p>Locally sourced Rwandan coffee, freshly brewed. Free refills.</p>
+                    <div class="labels">
+                        <span>Hot</span>
+                        <span>Local</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Fresh Juice">
+                </div>
+                <div class="card-content">
+                    <h3>Fresh Juice <span class="price">6,000 RWF</span></h3>
+                    <p>Choice of orange, watermelon, pineapple, or mixed fruit juice.</p>
+                    <div class="labels">
+                        <span>Fresh</span>
+                        <span>Vitamin C</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1564894809617-ef2c1c3cd677?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Smoothies">
+                </div>
+                <div class="card-content">
+                    <h3>Breakfast Smoothies <span class="price">8,000 RWF</span></h3>
+                    <p>Choose from strawberry banana, green detox, or tropical mango smoothie.</p>
+                    <div class="labels">
+                        <span>Vegetarian</span>
+                        <span>Energizing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2024 Stella Nova Motel Restaurant & Bar. Open daily 6AM - 11PM</p>
+        <p>Kigali, Rwanda • (250) 788-8888 • info@StellaNovamotel.com</p>
+    </footer>
+
+    <script>
+        // Create floating particles for background
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 5 and 15px
+                const size = Math.random() * 10 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                
+                // Random animation duration between 10 and 20s
+                const duration = Math.random() * 10 + 15;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random delay
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        });
+    </script>
+</body>
+</html>
